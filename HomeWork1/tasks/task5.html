@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task5</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    Задача. Додаток містить масив об’єктів (логін, пароль) -- інсуючі логіни і паролі. Користувач вводить логін і
+    пароль, а програма повідомляє чи може користувач бути авторизованим (чи є він одним з масиву)
+  </p>
+
+  <div id="app">
+    <label>
+      Login:
+      <input type="text" v-model.lazy.trim="userLogin">
+    </label> <br>
+    <label>
+      Password:
+      <input type="password" v-model.lazy="userPassword">
+    </label><br>
+    <button @click="onCheck">Go</button>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+    const userList = [
+      {
+        login: 'Ivan',
+        password: 'Petrov',
+      },
+      {
+        login: 'Taras',
+        password: 'Viter',
+      },
+      {
+        login: 'Anya',
+        password: 'Uskiv',
+      },
+    ]
+    createApp({
+      data() {
+        return {
+          userLogin: null,
+          userPassword: null,
+          isExist: null
+        }
+      },
+      methods: {
+        onCheck() {
+
+          // let isExist = userList.some(user => (user.login === this.userLogin && user.password === this.userPassword))
+          // if (isExist) alert('Bітаємо на нашому сайті!')
+          // else alert('Для авторизації спочатку зареєструйтеся!')
+
+          for (user of userList) {
+            if (user.login === this.userLogin && user.password === this.userPassword) {
+              this.isExist = true
+              alert(`${user.login} вітаємо на нашому сайті!`)
+              break
+            }
+          }
+          if (!this.isExist) alert('Для авторизації спочатку зареєструйтеся!')
+          this.userLogin = null
+          this.userPassword = null
+          this.isExist = null
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

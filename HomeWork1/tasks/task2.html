@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task2</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+  </style>
+</head>
+
+<body>
+  <p>Задача. Вводиться номер місяця. Автоматично виводити рекомендований одяг (зима – пальто, літо – шорти ….). Також
+    автоматично виводити зображення з відповідним зображенням лісу (зима – ліс зі снігом, осінь – жовтий ліс, …).</p>
+
+  <div id="app">
+    <label>
+      Введіть номер місяця від 1 до 12:
+      <input type="number" v-model.number.lazy="monthNumber">
+    </label>
+    <div>
+      <p>Радимо одягти: <span>{{recommendClothes}}</span></p>
+      <img :src="seasonPicture" alt="forest">
+    </div>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+
+    const seasonsList = [
+      winter = {
+        month: [12, 1, 2],
+        clothes: ['тепла куртка', 'шапка'],
+        picture: './img/winter.jpg'
+      },
+      spring = {
+        month: [3, 4, 5],
+        clothes: ['плащик', 'резинові сапоги'],
+        picture: './img/spring.jpg'
+      },
+      summer = {
+        month: [6, 7, 8],
+        clothes: ['шортики', 'футболка'],
+        picture: './img/summer.jpg'
+      },
+      autumn = {
+        month: [9, 10, 11],
+        clothes: ['куртка', 'парасолька'],
+        picture: './img/autumn.jpg'
+      }
+    ]
+
+    createApp({
+      data() {
+        return {
+          monthNumber: 1,
+        }
+      },
+      methods: {
+        getSeason() {
+          if (this.monthNumber <= 0 || this.monthNumber > 12) this.monthNumber = 1
+          for (season of seasonsList) {
+            if (season.month.includes(this.monthNumber))
+              return season
+          }
+        }
+      },
+      computed: {
+        recommendClothes() {
+          return `${this.getSeason().clothes[0]} i ${this.getSeason().clothes[1]}.`
+        },
+        seasonPicture() {
+          return this.getSeason().picture
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

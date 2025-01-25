@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task4</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+
+    .rate {
+      list-style: none;
+      margin-top: 0;
+      padding: 0;
+    }
+
+    .greenAmount {
+      color: green;
+    }
+
+    .redAmount {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="margin-bottom: 50px;">
+    <p>Задача. “Рахунок у банку”.</p>
+    Вимоги:
+    <ol>
+      <li>Спочатку сума дорівнює 0грн. Змінити суму у гривнях можна або зарахуванням на рахунок, або зняттям.</li>
+      <li>Сума автоматично переводиться у долари та євро (фіксований курс задається у data).</li>
+      <li>можливість зарахувати суму (контролювати, щоб не була від’ємною)</li>
+      <li>можливість зняти (щоб не можна зняти більше ніж є на рахунку)</li>
+      <li>при виконанні зняття і зарахування коштів вираховувати 3% від суми (відображати кількість відсотків
+        автоматично)</li>
+    </ol>
+
+    При зміні суми :
+    <ul>
+      <li>якщо було зняття, то суму відоражати червоним</li>
+      <li>якщо було зарахування, то суму відображати зеленим</li>
+    </ul>
+    Якщо сума валюти менша за 100 то відображати червоним кольором, інакше - зеленим
+    <hr>
+  </div>
+
+  <div id="app">
+    <div>Сума на рахунку: <span :class="balanceColor">{{userMoney}}</span> грн.</div>
+    <br>
+    <label>
+      Зарахувати на рахунок:
+      <input type="number" v-model.number="addedSum">
+    </label>
+    <button @click="addSum">Зарахувати</button>
+    <br>
+    <br>
+    <label>
+      Зняти з рахунку:
+      <input type="number" v-model.number="withdrawalSum">
+    </label>
+    <button @click="withdrawSum">Зняти</button>
+    <br>
+    <br>
+    <div>Відсотки за обслуговування: <span>{{bankComission}} грн.</span></div>
+    <hr>
+    <ul class="rate">
+      <li>Сума у доларах: $<span :class="dollarBalanceColor">{{moneyInUSD}}</span></li>
+      <li>Сума у євро: €<span :class="euroBalanceColor">{{moneyInEUR}}</span></li>
+    </ul>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          userMoney: 0,
+          dollarRate: 42.35,
+          euroRate: 44.43,
+          addedSum: null,
+          withdrawalSum: null,
+          balanceColor: 'inherit',
+          bankComission: 0,
+        }
+      },
+      methods: {
+        getComission(sum) {
+          return sum * 0.3
+        },
+        addSum() {
+          if (this.addedSum <= 0) alert('Введіть коректну суму')
+          else {
+            this.bankComission = this.getComission(this.addedSum)
+            this.userMoney += this.addedSum - this.bankComission
+            this.balanceColor = 'greenAmount'
+          }
+          this.addedSum = null
+        },
+        withdrawSum() {
+          this.bankComission = this.getComission(this.withdrawalSum)
+          if (this.withdrawalSum + this.bankComission > this.userMoney) alert('Введіть коректну суму')
+          else {
+            this.userMoney -= (this.withdrawalSum + this.bankComission)
+            this.balanceColor = 'redAmount'
+          }
+          this.withdrawalSum = null
+        },
+        getCurrencyColor(sum) {
+          if (sum >= 100) return 'greenAmount'
+          else return 'redAmount'
+        }
+      },
+      computed: {
+        moneyInUSD() {
+          return (this.userMoney / this.dollarRate).toFixed(2)
+        },
+        moneyInEUR() {
+          return (this.userMoney / this.euroRate).toFixed(2)
+        },
+        dollarBalanceColor() {
+          return this.getCurrencyColor(this.moneyInUSD)
+        },
+        euroBalanceColor() {
+          return this.getCurrencyColor(this.moneyInEUR)
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

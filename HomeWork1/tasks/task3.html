@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task3</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+  </style>
+</head>
+
+<body>
+  <p>Задача. Задано початок та кінець діапазону. При натисканні на кнопку випадковим чином генерувати значення з
+    вказаного діапазону та відображати його.</p>
+
+  <div id="app">
+    <label>
+      Введіть початок діапазону:
+      <input type="number" v-model="start">
+    </label>
+    <label>
+      Введіть кінець діапазону:
+      <input type="number" v-model="end">
+    </label>
+    <hr>
+    <div>Випадкове число: <span>{{randomNumber}}</span></div>
+    <button @click="getRandomNumber">Generate</button>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          start: 0,
+          end: 10,
+          randomNumber: null,
+        }
+      },
+      methods: {
+        getRandomNumber() {
+          this.randomNumber = this.start + Math.floor(Math.random() * (this.end - this.start + 1))
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>
