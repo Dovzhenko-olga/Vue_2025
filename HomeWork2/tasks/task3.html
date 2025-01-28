@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task3</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+
+    .wordCard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 200px;
+      height: 250px;
+      padding: 5px 10px;
+    }
+
+    .wordCard img {
+      width: 150px;
+      height: 175px;
+    }
+
+    .correct {
+      border: 2px solid green;
+    }
+
+    .inCorrect {
+      border: 2px solid red;
+    }
+  </style>
+</head>
+
+<body>
+
+  <p>
+    Задача. Елемент тренажера англійської. Виводимо зображення елемента і слово. Користувач вводить відповідь. Якщо
+    вірно – відтворюємо фразу «Добре. Молодець!» (і додаємо зелену рамку до елемента), якщо ні - то відтворюємо фразу
+    «Невірно, спробуйте ще раз» (і додаємо червону рамку).
+  </p>
+  <div id="app">
+    <div class="wordCard" :class="wordCardClass">
+      <img :src="getCard.link" :alt="getCard.wordEn">
+      <span>{{getCard.wordEn}}</span>
+      <span>Ваш переклад:</span>
+      <input type="text" placeholder="Введіть переклад" v-model.lazy="userWord">
+      <button type="button" @click="checkWord">Перевірити</button>
+    </div>
+    <span v-if="isChecked">{{isChecked}}</span>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+    const dictionary = [
+      {
+        wordUa: 'стіл',
+        wordEn: 'table',
+        link: '../img/table.jpg',
+      },
+      {
+        wordUa: 'квітка',
+        wordEn: 'flower',
+        link: '../img/flower.jpg',
+      },
+      {
+        wordUa: 'весна',
+        wordEn: 'spring',
+        link: '../img/spring.jpg',
+      },
+    ]
+
+    createApp({
+      data() {
+        return {
+          userWord: null,
+          currentCard: {},
+          isCorrect: null
+        }
+      },
+      methods: {
+        checkWord() {
+          this.isCorrect = this.userWord && this.userWord.toLowerCase() === this.currentCard.wordUa
+        },
+      },
+      computed: {
+        getCard() {
+          let randomCardNumber = Math.floor(Math.random() * dictionary.length)
+          this.currentCard = dictionary[randomCardNumber]
+          return this.currentCard
+        },
+        isChecked() {
+          if (this.userWord) {
+            if (this.isCorrect)
+              return 'Добре. Молодець!'
+            else return 'Невірно, спробуйте ще раз'
+          }
+        },
+        wordCardClass() {
+          if (this.userWord)
+            return this.isCorrect ? 'correct' : 'inCorrect'
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

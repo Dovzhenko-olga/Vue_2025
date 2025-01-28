@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task5</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+
+    .search-item {
+      width: 600px;
+      margin-bottom: 40px;
+    }
+
+    .search-item a {
+      text-decoration: none;
+    }
+
+    .item-head {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      display: inline-block;
+      margin-right: 10px;
+      width: 30px;
+      height: 30px;
+    }
+
+    h5 {
+      margin: 0;
+    }
+
+    .item-head_link {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    h3 {
+      margin: 5px 0;
+    }
+
+    .item-description {
+      margin: 0 0 5px;
+      font-size: 12px;
+    }
+
+    .main-link {
+      display: inline-block;
+      width: 150px;
+      margin-right: 40px;
+      font-size: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .translate {
+      font-size: 10px;
+    }
+
+    .links {
+      display: inline-block;
+      margin-right: 10px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    Самостійно сформуйте масив даних та виведіть фрагмент на зразок поданого (дані не обов’язково повинні співпадати)
+  </p>
+  <hr>
+
+  <div id="app">
+    <div v-for="site in sitesList" class="search-item" :key="site.id">
+      <div class="item-head">
+        <img class="logo" :src="site.icon" alt="icon">
+        <div>
+          <h5>{{site.siteTitle}}</h5>
+          <div class="item-head_link">
+            <a class="main-link" href="site.mainLink">{{site.mainLink}}</a>
+            <a class="translate" href="https://translate.google.com/">Перекласти цю сторінку</a>
+          </div>
+        </div>
+      </div>
+      <a href="site.mainLink">
+        <h3>{{site.topicTitle}}</h3>
+      </a>
+
+      <p class="item-description">{{site.description}}</p>
+      <a class="links" v-for="linkItem in site.linksList" href="linkItem.link"> {{linkItem.title}} </a>
+    </div>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+    const searchList = [
+      {
+        id: '1',
+        icon: '../img/vue.png',
+        siteTitle: 'Vue.js',
+        topicTitle: 'Form Input Bindings',
+        description: 'When dealing with forms on the frontend, we often need to sync the state of form input elements with corresponding state in JavaScript. It can be cumbersome ...',
+        mainLink: 'https://vuejs.org',
+        linksList: [
+          {
+            title: 'Basic Usage',
+            link: 'https://vuejs.org/guide/essentials/forms#basic-usage'
+          },
+          {
+            title: 'Value Bindings',
+            link: 'https://vuejs.org/guide/essentials/forms#value-bindings'
+          },
+        ]
+      },
+      {
+        id: '2',
+        icon: '../img/W3Schools.png',
+        siteTitle: 'W3schools',
+        topicTitle: 'HTML input placeholder Attribute',
+        description: 'The placeholder attribute specifies a short hint that describes the expected value of an input field (e.g. a sample value or a short description of the expected ...',
+        mainLink: 'https://www.w3schools.com/tags/att_input_placeholder.asp',
+        linksList: [
+          {
+            title: 'References',
+            link: 'https://developer.mozilla.org/en-US/docs/Web'
+          },
+          {
+            title: 'Blog',
+            link: 'https://developer.mozilla.org/en-US/blog/'
+          },
+        ]
+      },
+      {
+        id: '3',
+        icon: '../img/mdn.png',
+        siteTitle: 'MDN Web Docs',
+        topicTitle: 'HTML attribute: placeholder - MDN Web Docs',
+        description: 'The placeholder attribute defines the text displayed in a form control when the control has no value. The placeholder text should provide a brief hint to the ...',
+        mainLink: 'https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/placeholder',
+        linksList: [
+          {
+            title: 'Tutorial',
+            link: 'https://www.w3schools.com/html/default.asp'
+          },
+          {
+            title: 'Exercises',
+            link: 'https://www.w3schools.com/html/html_exercises.asp'
+          },
+        ]
+      },
+      {
+        id: '4',
+        icon: '../img/StackOverflow.png',
+        siteTitle: 'Stack Overflow',
+        topicTitle: 'How to change the placeholder of an input in css?',
+        description: 'I want to be able to change the placeholder content in css, from "My placeholder" to something else. I managed to change the color and background and the other ...',
+        mainLink: 'https://stackoverflow.com/questions/72657804/how-to-change-the-placeholder-of-an-input-in-css',
+        linksList: [
+          {
+            title: 'Careers',
+            link: 'https://stackoverflow.co/company/careers/'
+          },
+          {
+            title: 'Press',
+            link: 'https://stackoverflow.co/company/press/'
+          },
+          {
+            title: 'Social Impact',
+            link: 'https://stackoverflow.co/company/social-impact/'
+          },
+        ]
+      },
+    ];
+
+    createApp({
+      data() {
+        return {
+        }
+      },
+      computed: {
+        sitesList() {
+          return searchList
+        }
+      }
+    }).mount('#app')
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task2</title>
+  <style>
+    ul {
+      list-style: none;
+      margin-top: 0;
+      padding: 0;
+    }
+
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+
+    .statuSection {
+      width: 200px;
+      height: 200px;
+      padding: 5px 20px;
+    }
+
+    .business {
+      background: url(../img/business.jpg) no-repeat center / cover;
+    }
+
+    .econom {
+      background: url(../img/cloud.jpeg) no-repeat center / cover;
+    }
+  </style>
+</head>
+
+<body>
+  <p>Задача. З випадаючого списку вибираємо клас квитка у літаку. Якщо:
+
+  <ul>
+    <li>- бізнес - виводимо елементи для вибору газети та коньяку (якщо вибрано коньяк, то запропонувати закуску
+      (так/ні)), на фоні зображення бізнес кают</li>
+    <li>- економ – виводимо елементи для вибору типу пива і чипсів, на фоні хмарки.</li>
+  </ul>
+  </p>
+
+  <div id="app">
+    <h3>Оберіть клас</h3>
+    <select v-model="ticketClass">
+      <option value="business">Бізнес</option>
+      <option value="econom">Економ</option>
+    </select>
+    <hr>
+    <div class="statuSection" :class="statusClass" v-if="isTickedCheked">
+      <h3>Оберіть додатково</h3>
+      <select v-if="isBusines" v-model="businessOptions">
+        <option value="newspaper">Газета</option>
+        <option value="cognac">Коньяк</option>
+      </select>
+      <select v-else>
+        <option value="beer">Пиво</option>
+        <option value="chips">Чіпси</option>
+      </select>
+      <div v-if="isNeedSnack">
+        <h3>Бажаєте закуску?</h3>
+        <select>
+          <option value="yes">Так</option>
+          <option value="no">Ні</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          ticketClass: null,
+          businessOptions: null,
+          economOptions: null,
+        }
+      },
+      computed: {
+        isTickedCheked() {
+          return this.ticketClass
+        },
+        isBusines() {
+          if (this.isTickedCheked)
+            return this.ticketClass === 'business'
+        },
+        isNeedSnack() {
+          if (this.isBusines)
+            return this.businessOptions === 'cognac'
+        },
+        statusClass() {
+          if (this.isBusines) return 'business'
+          else return 'econom'
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

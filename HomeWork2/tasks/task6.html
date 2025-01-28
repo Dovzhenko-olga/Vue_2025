@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task6</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+
+    .dishesTable {
+      display: flex;
+      justify-content: space-around;
+      width: 800px;
+    }
+
+    .dishesCol {
+      text-align: center;
+      width: 200px;
+      min-height: 200px;
+    }
+
+    .myDish {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <p>Задача. На кухню поступають замовлення. Спочатку ми додаємо їх у список “Очікують на виконання”, якщо повар
+    береться робити — замовлення переходить у список “Виконуються”, якщо замовлення виконано — переходить у список
+    “Готові до виносу”. Якщо натиснути на “Подано” - страва зникає з таблиці</p>
+  <div id="app">
+    <label>
+      Нова замовлена страва:
+      <input type="text" v-model="newDish">
+    </label>
+    <button type="button" @click="addDish">Додати</button>
+    <div v-if="isAvailableDish" class="dishesTable">
+      <div class="dishesCol">
+        <h4>Очікують виконання</h4>
+        <div class="myDish" v-for="(dish, ind) in waitingList" :key="dish.id">
+          <span>{{dish.title}}</span>
+          <button @click="toCoock(ind)">Готувати</button>
+        </div>
+      </div>
+      <div class="dishesCol">
+        <h4>Виконуються</h4>
+        <div class="myDish" v-for="(dish, ind) in processingList" :key="dish.id">
+          <span>{{dish.title}}</span>
+          <button @click="addToReady(ind)">Готово</button>
+        </div>
+      </div>
+      <div class="dishesCol">
+        <h4>Готові до виносу</h4>
+        <div class="myDish" v-for="(dish, ind) in completedList" :key="dish.id">
+          <span>{{dish.title}}</span>
+          <button @click="goToClient(ind)">Подано</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          newDish: null,
+          waitingList: [],
+          processingList: [],
+          completedList: [],
+        }
+      },
+      methods: {
+        addDish() {
+          if (this.newDish) this.waitingList.push({
+            id: new Date().getTime(),
+            title: this.newDish
+          })
+          this.newDish = null
+        },
+        toCoock(ind) {
+          let dish = this.waitingList.splice(ind, 1)[0]
+          this.processingList.push(dish)
+        },
+        addToReady(ind) {
+          let dish = this.processingList.splice(ind, 1)[0]
+          this.completedList.push(dish)
+        },
+        goToClient(ind) {
+          this.completedList.splice(ind, 1)
+        }
+      },
+      computed: {
+        isAvailableDish() {
+          return this.waitingList.length !== 0 || this.processingList.length !== 0 || this.completedList.length !== 0
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

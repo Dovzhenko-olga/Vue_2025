@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task1</title>
+  <style>
+    ul {
+      list-style: none;
+      margin-top: 0;
+      padding: 0;
+    }
+
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+
+    .smile {
+      font-size: 50px;
+      width: 70px;
+      height: 70px;
+    }
+
+    .blueMessage {
+      color: blue;
+    }
+
+    .redMessage {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <p>Задача. Вводимо логіна і пароль. Якщо логін вірний відображаємо смайл. Якщо ні, то:
+
+  <ul>
+    <li>- якщо логін = Іван – колір повідомлення про помилку синій</li>
+    <li>- якщо хтось інший, то колір повідомлення червоний</li>
+  </ul>
+  </p>
+  <hr>
+  <div id="app">
+    <label>
+      Login:
+      <input type="text" v-model.lazy="userLogin">
+    </label>
+    <br>
+    <label>
+      Passwod:
+      <input type="password" v-model.lazy="userPassword">
+    </label>
+    <br>
+    <button>Go</button>
+    <br>
+    <div v-if="isLoginValid" class="smile">😊</div>
+    <span v-else :class="isIvan">Введено неіснуючий логін.</span>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+    const userList = [
+      {
+        login: 'petro',
+        password: '12ddf34',
+      },
+      {
+        login: 'mariya',
+        password: '12df34',
+      },
+      {
+        login: 'yana',
+        password: '12df34',
+      },
+    ]
+
+    createApp({
+      data() {
+        return {
+          userLogin: null,
+          userPassword: null,
+        }
+      },
+      computed: {
+        isLoginValid() {
+          if (this.userLogin)
+            return userList.some(user => user.login === this.userLogin.toLowerCase())
+        },
+        isIvan() {
+          if (this.userLogin && !this.isLoginValid)
+            return this.userLogin.toLowerCase() === 'ivan' ? 'blueMessage' : 'redMessage'
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>
