@@ -61,9 +61,9 @@
       <input type="password" v-model.lazy="userPassword">
     </label>
     <br>
-    <button>Go</button>
+    <button @click="isLoginValid()">Go</button>
     <br>
-    <div v-if="isLoginValid" class="smile">😊</div>
+    <div v-if="isAvailable" class="smile">😊</div>
     <span v-else :class="isIvan">Введено неіснуючий логін.</span>
   </div>
   <a href="../index.html" rel="noopener noreferrer">
@@ -92,17 +92,21 @@
         return {
           userLogin: null,
           userPassword: null,
+          isAvailable: null,
         }
       },
-      computed: {
+      methods: {
         isLoginValid() {
-          if (this.userLogin)
-            return userList.some(user => user.login === this.userLogin.toLowerCase())
+          if (this.userLogin && this.userPassword)
+            this.isAvailable = userList.some(user => user.login === this.userLogin.toLowerCase() && user.password === this.userPassword)
+          return this.isAvailable
         },
+      },
+      computed: {
         isIvan() {
-          if (this.userLogin && !this.isLoginValid)
+          if (this.userLogin && this.userPassword && !this.isAvailable)
             return this.userLogin.toLowerCase() === 'ivan' ? 'blueMessage' : 'redMessage'
-        }
+        },
       }
     }).mount('#app')
   </script>

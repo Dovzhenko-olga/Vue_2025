@@ -53,21 +53,21 @@
     <div v-if="isAvailableDish" class="dishesTable">
       <div class="dishesCol">
         <h4>Очікують виконання</h4>
-        <div class="myDish" v-for="(dish, ind) in waitingList" :key="dish.id">
+        <div v-for="(dish, ind) in waitingList" class="myDish" :key="dish.id">
           <span>{{dish.title}}</span>
           <button @click="toCoock(ind)">Готувати</button>
         </div>
       </div>
       <div class="dishesCol">
         <h4>Виконуються</h4>
-        <div class="myDish" v-for="(dish, ind) in processingList" :key="dish.id">
+        <div v-for="(dish, ind) in processingList" class="myDish" :key="dish.id">
           <span>{{dish.title}}</span>
           <button @click="addToReady(ind)">Готово</button>
         </div>
       </div>
       <div class="dishesCol">
         <h4>Готові до виносу</h4>
-        <div class="myDish" v-for="(dish, ind) in completedList" :key="dish.id">
+        <div v-for="(dish, ind) in completedList" class="myDish" :key="dish.id">
           <span>{{dish.title}}</span>
           <button @click="goToClient(ind)">Подано</button>
         </div>
