@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task2</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 500px;
+    }
+
+    .table {
+      display: flex;
+      justify-content: space-between;
+      width: 400px;
+      margin: 0 auto;
+    }
+
+    .dancerList {
+      width: 100px;
+      padding: 15px;
+    }
+
+    select {
+      width: 60px;
+    }
+
+    .addButton {
+      margin: 0 auto;
+    }
+
+    .pair {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      padding: 5px;
+      width: 250px;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    Задача. Пари для танців. Поступово вибираємо хлопця, дівчину і додаємо у обрані пари. Пару можна видалити. Поки не
+    вибрано хлопця і дівчину кнопка «Додати» заблокована. Якщо не вистачає хлопців або дівчат вибір також блокується.
+  </p>
+
+  <div id="app">
+    <div class="container">
+      <div class="table">
+        <div class="dancerList">
+          <h3>Хлопці</h3>
+          <select v-model="selectedBoy" :disabled="!isPairsAvailable">
+            <option v-for="(boy, ind) in boysList" :key="ind" :value="boy">{{boy}}</option>
+          </select>
+        </div>
+        <div class="dancerList">
+          <h3>Дівчата</h3>
+          <select v-model="selectedGirl" :disabled="!isPairsAvailable">
+            <option v-for="(girl, ind) in girlsList" :key="ind" :value="girl">{{girl}}</option>
+          </select>
+        </div>
+      </div>
+      <button @click="addPair" class="addButton" :disabled="!isPairSelect">Додати</button>
+      <div v-show="pairsList.length > 0">
+        <h3>Обрані пари</h3>
+        <div v-for="(pair, ind) in pairsList" :key="ind" class="pair">
+          {{pair[0]}} - {{pair[1]}}
+          <button @click="deletePair(ind)">Видалити пару</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          boysList: ['Ivan', 'Petro', 'Stepan', 'Dmytro'],
+          girlsList: ['Galya', 'Tanya', 'Olena', 'Yulya', 'Vika'],
+          selectedBoy: null,
+          selectedGirl: null,
+          pairsList: []
+        }
+      },
+      methods: {
+        addPair() {
+          if (this.selectedBoy && this.selectedGirl) {
+            this.pairsList.push([this.selectedBoy, this.selectedGirl])
+            this.boysList = this.boysList.filter(boy => boy !== this.selectedBoy)
+            this.girlsList = this.girlsList.filter(girl => girl !== this.selectedGirl)
+            this.selectedBoy = null
+            this.selectedGirl = null
+          }
+        },
+        deletePair(ind) {
+          const deletedPair = this.pairsList.splice(ind, 1)
+          this.boysList.push(deletedPair[0][0])
+          this.girlsList.push(deletedPair[0][1])
+        }
+      },
+      computed: {
+        isPairSelect() {
+          if (this.selectedBoy && this.selectedGirl) return true
+        },
+        isPairsAvailable() {
+          if (this.boysList.length > 0 && this.girlsList.length > 0) return true
+        }
+      },
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

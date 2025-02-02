@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task3</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+
+    .translate-table {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      width: 300px;
+    }
+
+    .list {
+      width: 100px;
+      padding: 5px;
+      border: 2px solid black;
+      cursor: pointer;
+    }
+
+    .list-item {
+      margin-bottom: 5px;
+    }
+
+    .initial {
+      border: 2px solid black;
+    }
+
+    .chosen {
+      border: 2px solid blue;
+    }
+
+    .inCorrect {
+      border: 2px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    Перекладач. Користувачу виводять змішані картки з словами на англійській і українській мові. Користувач поступово
+    клікає на картки (виділяємо синьою рамкою). Якщо знайдено правильні пари карток, що відповідають одному слову, то
+    видаляємо ці картки. Інакше - виділяємо червоною рамкою і через секунду забираємо рамку.
+  </p>
+
+  <div id="app">
+    <h2>Знайдіть пари слів</h2>
+    <div class="translate-table">
+      <div class="list">
+        <div v-for="word in wordsListEn" :key="word" class="list-item" :class="borderColorClass(word)"
+          @click="chooseEnItem(word)">
+          {{word}}</div>
+      </div>
+      <div class="list">
+        <div v-for="word in wordsListUa" :key="word" class="list-item" :class="borderColorClass(word)"
+          @click="chooseUaItem(word)">
+          {{word}}</div>
+      </div>
+    </div>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+    const words = [
+      { id: 0, en: 'table', ua: 'стіл' },
+      { id: 1, en: 'car', ua: 'автомобіль' },
+      { id: 2, en: 'bus', ua: 'автобус' },
+      { id: 3, en: 'man', ua: 'людина' },
+      { id: 4, en: 'boy', ua: 'хлопець' },
+    ]
+
+    createApp({
+      data() {
+        return {
+          userEnChoice: null,
+          userUaChoice: null,
+        }
+      },
+      methods: {
+        shuffleArray(arr) {
+          for (let i = arr.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]]
+          }
+          return arr
+        },
+        chooseEnItem(word) {
+          this.userEnChoice = word
+        },
+        chooseUaItem(word) {
+          this.userUaChoice = word
+        },
+        borderColorClass(word) {
+          let borderColorClass = 'initial'
+          if (this.userEnChoice && this.userUaChoice === word && !this.isCorrect)
+            borderColorClass = 'inCorrect'
+          else if (this.userEnChoice === word || this.userUaChoice === word) {
+            if (!(this.userEnChoice && this.userUaChoice)) borderColorClass = 'chosen'
+          }
+          return borderColorClass
+        }
+      },
+      computed: {
+        wordsListEn() {
+          let arr = words.map(item => item.en)
+          return this.shuffleArray(arr)
+        },
+        wordsListUa() {
+          let arr = words.map(item => item.ua)
+          return this.shuffleArray(arr)
+        },
+        isCorrect() {
+          if (this.userEnChoice && this.userUaChoice) {
+            for (let i = 0; i < words.length; i++) {
+              if (words[i].en === this.userEnChoice && words[i].ua === this.userUaChoice) {
+                words.splice(i, 1)
+                this.userEnChoice = null
+                this.userUaChoice = null
+                return true
+              }
+            }
+          }
+        },
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

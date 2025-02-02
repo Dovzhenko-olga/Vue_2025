@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <title>Task1</title>
+  <style>
+    a {
+      color: royalblue;
+    }
+
+    a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: mediumaquamarine;
+    }
+
+    .lowSpeed {
+      background-color: orange;
+    }
+
+    .middleSpeed {
+      background-color: green;
+    }
+
+    .fastSpeed {
+      background-color: red;
+    }
+
+    .dangerMessage {
+      box-sizing: border-box;
+      width: 200px;
+      padding: 10px;
+      font-size: 50px;
+      color: red;
+      animation: blink 1s ease infinite;
+    }
+
+    @keyframes blink {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    Задача 3. Вводиться дозволена швидкість і поточна швидкість авто. Якщо не введено дозволену швидкість, то елемент
+    введення поточної швидкості заблокований. Якщо швидкість менше 50% дозволеної, то колір input – оранжевий, якщо від
+    50% до 100% - зелений, вище 100% - червоний. Якщо значення вище 90% починає блимати повідомлення «Увага!»
+  </p>
+
+  <div id="app">
+    <label>
+      Введіть дозволену швидкість
+      <input type="number" v-model.number.lazy="speedLimit">
+    </label>
+    <label>
+      Введіть поточну швидкість
+      <input type="number" :class="currentSpeedClass" :disabled="!isLimitAvailable" v-model.number="currentSpeed">
+    </label>
+    <template v-if="isDangerous">
+      <div class="dangerMessage">УВАГА!</div>
+    </template>
+  </div>
+  <a href="../index.html" rel="noopener noreferrer">
+    Повернутися до задач.
+  </a>
+
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          speedLimit: null,
+          currentSpeed: null,
+        }
+      },
+      computed: {
+        isLimitAvailable() {
+          if (this.speedLimit) return true
+        },
+        currentSpeedClass() {
+          if (this.currentSpeed) {
+            if (this.currentSpeed < this.speedLimit / 2) return 'lowSpeed'
+            else if (this.currentSpeed <= this.speedLimit) return 'middleSpeed'
+            else return 'fastSpeed'
+          }
+        },
+        isDangerous() {
+          if (this.currentSpeed && this.currentSpeed > this.speedLimit * 90 / 100) return true
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>
